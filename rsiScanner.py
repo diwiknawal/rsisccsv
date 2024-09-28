@@ -83,6 +83,11 @@ def main():
                 existing_data.loc[index[0], 'Average Loss'] = round(latest_data['Average Loss'], 3)
                 existing_data.loc[index[0], 'RS'] = round(latest_data['RS'], 3)
                 existing_data.loc[index[0], 'RSI'] = round(latest_data['RSI'], 3)
+                if((round(latest_data['RSI'], 3) < 35 and round(latest_data['RSI'], 3) > 29)):
+                    existing_data.loc[index[0], 'Action'] =   "Open the eyes"
+                else:
+                    existing_data.loc[index[0], 'Action'] =  "Wait"
+
             else:
                 print(f"Symbol {symbol} not found in existing data.")
 

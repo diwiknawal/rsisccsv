@@ -24,7 +24,7 @@ if response.status_code == 200:
     data = StringIO(response.text.replace('"Disclaimer - The Data provided in the adjusted 52 week high and adjusted 52 week low columns  are adjusted for corporate actions (bonus, splits & rights).For actual (unadjusted) 52 week high & low prices, kindly refer bhavcopy."\n"Effective for 25-Jan-2024"\n', ''))
     
     # Read CSV data and limit to the first 100 rows for testing
-    df = pd.read_csv(data)
+    df = pd.read_csv(data).head(200)
     
     # Rename columns for clarity
     df.columns = ['SYMBOL', 'SERIES', 'Adjusted 52_Week_High', '52_Week_High_Date', 'Adjusted 52_Week_Low', '52_Week_Low_Date']
@@ -89,7 +89,7 @@ if response.status_code == 200:
 
     # Add the 'Status' column based on the new Percentage Difference condition (-2% to -10%)
     filtered_df['Status'] = filtered_df['Percentage_Difference'].apply(
-        lambda x: "NEED TO LOOK" if -10 <= x <= -2 else "WAIT"
+        lambda x: "NEED TO LOOK" if (2 <= x < 10) else "WAIT"
     )
 
     # Save the filtered DataFrame to a new CSV file for all data
@@ -99,8 +99,18 @@ if response.status_code == 200:
     # Extract rows where the Status is "NEED TO LOOK"
     need_to_look_df = filtered_df[filtered_df['Status'] == "NEED TO LOOK"]
 
-    # Save the "NEED TO LOOK" data to another Excel file
-    need_to_look_df.to_excel("need_to_look_stocks.xlsx", index=False)
-    print("Data saved to need_to_look_stocks.xlsx")
+    # # Save the "NEED TO LOOK" data to another Excel file
+    # need_to_look_df.to_excel("need_to_look_stocks.xlsx", index=False)
+    # print("Data saved to need_to_look_stocks.xlsx")
+    # Load the CNX500 CSV file
+    cnx500_df = pd.read_csv("ind_nifty500list.csv")
+
+    # Filter need_to_look_df to keep only the rows where the SYMBOL is in CNX500
+    filtered_need_to_look_df = need_to_look_df[need_to_look_df['SYMBOL'].isin(cnx500_df['Symbol'])]
+
+    # Save the filtered DataFrame to a new CSV file
+    filtered_need_to_look_df.to_csv("filtered_need_to_look_in_cnx500.csv", index=False)
+
+    print("Filtered data saved to filtered_need_to_look_in_cnx500.csv")
 else:
     print(f"Failed to retrieve data. Status code: {response.status_code}")

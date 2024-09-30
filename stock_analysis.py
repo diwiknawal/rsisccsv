@@ -31,19 +31,19 @@ def get_52_week_high_low(stock_symbol):
     current_close = hist['Close'][-1] if not hist['Close'].empty else None
     
     # Calculate the difference (52-week high - current close)
-    difference = high_52_week - current_close if high_52_week is not None and current_close is not None else None
+    difference =  current_close-high_52_week
     
     # Determine status
-    status = "OK" if low_52_week < high_52_week and (difference is not None and difference < 60) else "Wait"
+    status = "OK" if date_low.date() < date_high.date() and (difference is not None and difference > 10) else "Wait"
 
     return {
         "Stock": stock_symbol,
-        "52 Week High": high_52_week,
+        "52 Week High": round(high_52_week,3),
         "Date of High": date_high.date() if date_high else None,
-        "52 Week Low": low_52_week,
+        "52 Week Low": round(low_52_week,3),
         "Date of Low": date_low.date() if date_low else None,
-        "Current Close": current_close,
-        "Difference (High - Close)": difference,
+        "Current Close": round(current_close,3),
+        "Difference (High - Close)": round(difference,3),
         "Status": status
     }
 

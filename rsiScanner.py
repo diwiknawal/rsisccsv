@@ -2,9 +2,6 @@ import pandas as pd
 import yfinance as yf
 from datetime import datetime, timedelta
 import os
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-from googleapiclient.http import MediaFileUpload
 
 # Step 2: Fetch and sort stock data for each code
 days_ago = 1120  # Number of days to look back

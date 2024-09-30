@@ -24,7 +24,7 @@ if response.status_code == 200:
     data = StringIO(response.text.replace('"Disclaimer - The Data provided in the adjusted 52 week high and adjusted 52 week low columns  are adjusted for corporate actions (bonus, splits & rights).For actual (unadjusted) 52 week high & low prices, kindly refer bhavcopy."\n"Effective for 25-Jan-2024"\n', ''))
     
     # Read CSV data and limit to the first 100 rows for testing
-    df = pd.read_csv(data).head(100)
+    df = pd.read_csv(data)
     
     # Rename columns for clarity
     df.columns = ['SYMBOL', 'SERIES', 'Adjusted 52_Week_High', '52_Week_High_Date', 'Adjusted 52_Week_Low', '52_Week_Low_Date']
